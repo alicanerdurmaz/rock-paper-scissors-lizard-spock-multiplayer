@@ -3,7 +3,6 @@ package game
 import (
 	"rpsls/room"
 	"rpsls/util"
-	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -13,11 +12,15 @@ const (
 )
 
 func (g *Game) Connect(payload *WebSocketPayload, conn *websocket.Conn) {
-	player, ok := g.Players.Get(payload.PlayerId)
+	g.Rooms.RWMutex.Lock()
+	defer g.Rooms.RWMutex.Unlock()
+
+	player, ok := g.Rooms.Map[payload.RoomId].Players[payload.PlayerId]
 	if !ok {
 		conn.WriteJSON(map[string]string{"command": Error, "message": "something went wrong"})
 		return
 	}
+
 	player.Conn = conn
 
 	room := g.Rooms.Map[payload.RoomId]
@@ -26,6 +29,9 @@ func (g *Game) Connect(payload *WebSocketPayload, conn *websocket.Conn) {
 }
 
 func (g *Game) Play(payload *WebSocketPayload) {
+	g.Rooms.RWMutex.Lock()
+	defer g.Rooms.RWMutex.Unlock()
+
 	currentRoom := g.Rooms.Map[payload.RoomId]
 
 	if currentRoom.Status == room.Finished {
@@ -40,7 +46,6 @@ func (g *Game) Play(payload *WebSocketPayload) {
 		return
 	}
 
-	g.SendRoomStateToAllConnectionsInRoom(currentRoom.Id)
 }
 
 func (g *Game) FinishGame(roomId string) {
@@ -48,13 +53,12 @@ func (g *Game) FinishGame(roomId string) {
 
 	currentRoom := g.Rooms.Map[roomId]
 	currentRoom.Status = room.Finished
-	g.SendRoomStateToAllConnectionsInRoom(roomId)
 
-	time.Sleep(RESTART_TIME * time.Second)
 	g.RestartGame(roomId)
 }
 
 func (g *Game) RestartGame(roomId string) {
+
 	currentRoom := g.Rooms.Map[roomId]
 
 	for playerId := range currentRoom.Choices {
@@ -64,7 +68,6 @@ func (g *Game) RestartGame(roomId string) {
 	currentRoom.Round += 1
 	currentRoom.Status = room.Started
 
-	g.SendRoomStateToAllConnectionsInRoom(roomId)
 }
 
 func (g *Game) CheckPlayersDidChoose(payload *WebSocketPayload) bool {

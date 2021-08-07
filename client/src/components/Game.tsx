@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { usePlayerContext } from '../context/PlayerContext'
 import useQuery from '../hooks/useQuery'
 
 enum RoomStatus {
@@ -32,8 +33,9 @@ type Player = {
 
 type WsResponse = {
   command: string
+  message: string
   room: {
-    players: Player[]
+    players: Record<string, number>
     scores: Record<string, number>
     choices: Record<string, number>
     winner: string
@@ -46,17 +48,19 @@ type WsResponse = {
 const Game = () => {
   const [data, setData] = useState<WsResponse | null>(null)
   const ws = useRef(new WebSocket('ws://localhost:8080/ws'))
+  const { player } = usePlayerContext()
   let query = useQuery()
 
-  const playerId = query.get('playerId') as string
+  const playerId = player.playerId
+  const roomId = query.get('roomId')
 
   useEffect(() => {
     ws.current.onopen = function (this: WebSocket, _event: Event) {
-      this.send(JSON.stringify({ roomId: query.get('roomId'), playerId: query.get('playerId'), command: 'connect' }))
+      this.send(JSON.stringify({ roomId: roomId, playerId, command: 'connect' }))
     }
 
     ws.current.onclose = function (this: WebSocket, _event: Event) {
-      this.send(JSON.stringify({ roomId: query.get('roomId'), playerId: query.get('playerId'), command: 'close' }))
+      this.send(JSON.stringify({ roomId: roomId, playerId, command: 'close' }))
     }
 
     ws.current.onerror = function (event) {
@@ -68,29 +72,29 @@ const Game = () => {
       console.log(data)
       setData(data)
     }
-  }, [query, ws])
+  }, [playerId, query, roomId, ws])
 
   const play = (value: number) => {
-    ws.current.send(
-      JSON.stringify({ roomId: query.get('roomId'), playerId: query.get('playerId'), value: value, command: 'play' }),
-    )
+    ws.current.send(JSON.stringify({ roomId: roomId, playerId: playerId, value: value, command: 'play' }))
   }
 
-  if (!data) return <h1>Yükleniyor</h1>
+  if (!data || data?.room?.status === 0) return <h1>Yükleniyor</h1>
+  if (data?.command === 'error') return <h1>{data.message}</h1>
 
   const room = data.room
-  const enemy = room.players.find(player => player.playerId !== playerId) as Player
+
+  const enemyId = Object.keys(room.players).find(playerId => player.playerId !== playerId) as string
 
   const playerChoice = room.choices[playerId] as Choice
-  const enemyChocie = room.choices[enemy.playerId] as Choice
+  const enemyChocie = room.choices[enemyId] as Choice
 
   const winner = room.winner === playerId ? 'YOU' : 'ENEMY'
 
   return (
     <div>
       <h1>Round : {room.round} </h1>
-      <h2>GAME : {query.get('roomId')}</h2>
-      <h2>Player : {query.get('playerId')}</h2>
+      <h2>GAME : {roomId}</h2>
+      <h2>Player : {playerId}</h2>
 
       <button onClick={() => play(Choice.Rock)}>Rock</button>
       <button onClick={() => play(Choice.Paper)}>Paper</button>
@@ -101,7 +105,7 @@ const Game = () => {
       <br />
       <br />
       <h2>
-        YOU : {room.scores[playerId]} ENEMY : {room.scores[enemy.playerId]}
+        YOU : {room.scores[playerId]} ENEMY : {room.scores[enemyId]}
       </h2>
       <br />
       <br />

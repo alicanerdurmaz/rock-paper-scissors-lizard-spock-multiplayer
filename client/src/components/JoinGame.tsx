@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { usePlayerContext } from '../context/PlayerContext'
 import useQuery from '../hooks/useQuery'
+import { api, buildQuery } from '../utils/api'
+import { routes } from '../utils/routes'
 
 interface JoinResponse {
   roomId: string
@@ -10,36 +12,38 @@ interface JoinResponse {
 
 const JoinGame = () => {
   const history = useHistory()
-  const { setPlayer } = usePlayerContext()
+  const { player } = usePlayerContext()
   const query = useQuery()
 
-  const playerId = query.get('playerId')
   const roomId = query.get('roomId')
 
   useEffect(() => {
     const joinRoom = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/room/join?roomId=${roomId}&playerId=${playerId}`)
+        if (!player || !roomId) return
+
+        const url = buildQuery(api.joinRoom, { roomId: roomId, playerId: player.playerId })
+        const response = await fetch(url)
         const data: JoinResponse = await response.json()
 
         if (response.status !== 200) {
           console.log(data.error)
           return
         }
+
+        history.push(buildQuery(routes.game, { roomId: roomId }))
       } catch (error) {
         console.log(error)
       }
-
-      history.push(`/game?roomId=${roomId}&playerId=${playerId}`)
     }
 
     joinRoom()
-  }, [history, playerId, roomId, setPlayer])
+  }, [history, roomId, player])
 
   return (
     <div>
       <h1>{roomId}</h1>
-      <h1>{playerId}</h1>
+      <h1>{player?.playerId}</h1>
     </div>
   )
 }

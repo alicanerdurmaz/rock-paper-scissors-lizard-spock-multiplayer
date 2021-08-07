@@ -43,22 +43,22 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 		err = conn.ReadJSON(payload)
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
-				log.Println("IsCloseError()", err)
+				log.Println("IsCloseError()", err, conn.RemoteAddr().String())
 			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Println("IsUnexpectedCloseError()", err)
 			}
-			break
+			return
 		}
 
 		if payload.checkIdIsValid() {
 			conn.WriteJSON(map[string]string{"command": Error, "message": "Room ID or Player ID is invalid"})
-			break
+			return
 		}
 
 		if !g.Rooms.CheckPlayerIsInRoom(payload.RoomId, payload.PlayerId) {
 			conn.WriteJSON(map[string]string{"command": Error, "message": "room is full or you not authorized to join"})
-			break
+			return
 		}
 
 		log.Printf("%+v\n", payload)
@@ -66,11 +66,15 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 		switch payload.Command {
 		case Connect:
 			g.Connect(payload, conn)
+			g.SendRoomStateToAllConnectionsInRoom(payload.RoomId)
 		case Play:
 			g.Play(payload)
+			g.SendRoomStateToAllConnectionsInRoom(payload.RoomId)
 		default:
 			conn.WriteJSON(map[string]string{"command": Error, "message": "something went wrong"})
+
 		}
+
 	}
 }
 
@@ -83,7 +87,10 @@ func (g *Game) SendToAllConnectionsInRoom(roomId string, payload map[string]inte
 
 func (g *Game) SendRoomStateToAllConnectionsInRoom(roomId string) {
 	room := g.Rooms.Map[roomId]
+
 	for _, p := range room.Players {
+		println("SendRoomStateToAllConnectionsInRoom : -> ", p.Conn.RemoteAddr().String())
 		p.Conn.WriteJSON(map[string]interface{}{"command": Ok, "room": room})
 	}
+
 }

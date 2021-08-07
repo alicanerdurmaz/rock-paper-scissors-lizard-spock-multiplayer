@@ -41,13 +41,20 @@ func (g *Game) CreatePlayerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *Game) RegisterPlayerHandler(w http.ResponseWriter, r *http.Request) {
-	playerId := r.URL.Query().Get("id")
+	playerId := r.URL.Query().Get("playerId")
 	g.Players.RegisterPlayer(playerId)
 
 	util.RespondWithJSON(w, http.StatusOK, map[string]interface{}{"playerId": playerId})
 }
 
 func (g *Game) GetAllRooms(w http.ResponseWriter, req *http.Request) {
+
+	for _, element := range g.Rooms.Map {
+		for _, p2 := range element.Players {
+			println(p2.Conn.RemoteAddr().String())
+		}
+	}
+
 	util.RespondWithJSON(w, http.StatusOK, g.Rooms.GetAll())
 }
 

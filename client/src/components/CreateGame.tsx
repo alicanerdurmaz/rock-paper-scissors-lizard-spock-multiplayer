@@ -1,25 +1,39 @@
+import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { api, buildQuery } from '../utils/api'
+import { routes } from '../utils/routes'
 
 type Room = {
-  gameId: string
+  roomId: string
   message: string
 }
 
 const CreateGame = () => {
   const history = useHistory()
+  const [roomId, setRoomId] = useState('')
 
   const createRoomHandler = async () => {
-    const response = await fetch(`http://localhost:8080/create`)
-
+    const response = await fetch(api.createRoom)
     if (response.status !== 200) return
 
-    const { gameId }: Room = await response.json()
+    const { roomId }: Room = await response.json()
 
-    history.push(`/join/${gameId}`)
+    history.push(buildQuery(routes.joinRoom, { roomId: roomId }))
   }
+
+  const joinRoomHandler = () => {
+    history.push(buildQuery(routes.joinRoom, { roomId: roomId }))
+  }
+
   return (
     <div>
       <button onClick={createRoomHandler}>create game</button>
+
+      <br />
+      <br />
+      <br />
+      <input value={roomId} onChange={e => setRoomId(e.target.value)}></input>
+      <button onClick={joinRoomHandler}>join game</button>
     </div>
   )
 }

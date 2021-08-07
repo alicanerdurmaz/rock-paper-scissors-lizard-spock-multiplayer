@@ -9,21 +9,23 @@ import { PlayerProvider } from './context/PlayerContext'
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Switch>
-          <Route path={routes.home} exact>
-            <CreateGame />
-          </Route>
-          <PlayerProvider>
-            <Route path={routes.joinGame}>
-              <JoinGame />
+      <PlayerProvider>
+        <Router>
+          <Switch>
+            <Route path={routes.home} exact>
+              <CreateGame />
             </Route>
-            <Route path={routes.game}>
-              <Game />
-            </Route>
-          </PlayerProvider>
-        </Switch>
-      </Router>
+            <PlayerProvider>
+              <Route path={routes.joinRoom}>
+                <JoinGame />
+              </Route>
+              <Route path={routes.game}>
+                <Game />
+              </Route>
+            </PlayerProvider>
+          </Switch>
+        </Router>
+      </PlayerProvider>
     </div>
   )
 }

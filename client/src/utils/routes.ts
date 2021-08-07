@@ -1,7 +1,7 @@
 export const routes = {
   home: '/',
-  joinGame: '/room/join',
-  createGame: '/room/create',
+  joinRoom: '/room/join',
+  createRoom: '/room/create',
   game: '/game',
   ws: '/ws',
 }

@@ -15,13 +15,13 @@ const (
 )
 
 type Room struct {
-	Players []*player.Player `json:"players"`
-	Scores  map[string]int   `json:"scores"`
-	Choices map[string]int   `json:"choices"`
-	Winner  string           `json:"winner"`
-	Round   int              `json:"round"`
-	Id      string           `json:"roomId"`
-	Status  int              `json:"status"`
+	Players map[string]*player.Player `json:"players"`
+	Scores  map[string]int            `json:"scores"`
+	Choices map[string]int            `json:"choices"`
+	Winner  string                    `json:"winner"`
+	Round   int                       `json:"round"`
+	Id      string                    `json:"roomId"`
+	Status  int                       `json:"status"`
 }
 
 type Rooms struct {
@@ -49,6 +49,7 @@ func (r *Rooms) CreateRoom() (string, error) {
 	}
 
 	r.Map[roomId] = &Room{Id: roomId, Status: Waiting}
+	r.Map[roomId].Players = make(map[string]*player.Player)
 	r.Map[roomId].Scores = make(map[string]int)
 	r.Map[roomId].Choices = make(map[string]int)
 	r.Map[roomId].Round = 1
@@ -89,7 +90,7 @@ func (r *Rooms) GetAll() map[string]*Room {
 }
 
 func (r *Room) AddPlayer(player *player.Player) {
-	r.Players = append(r.Players, player)
+	r.Players[player.Id] = player
 	r.Scores[player.Id] = 0
 	r.Choices[player.Id] = 0
 }
@@ -99,19 +100,7 @@ func (r *Rooms) TestCreateRoom() {
 	defer r.Unlock()
 
 	r.Map["1"] = &Room{Id: "1", Status: Waiting}
+	r.Map["1"].Players = make(map[string]*player.Player)
 	r.Map["1"].Scores = make(map[string]int)
 	r.Map["1"].Choices = make(map[string]int)
-
-	// r.Map["2"] = &Room{Id: "2", Status: Waiting}
-	// r.Map["2"].Scores = make(map[string]int)
-	// r.Map["2"].Plays = make(map[string]int)
-
-	// r.Map["3"] = &Room{Id: "3", Status: Waiting}
-	// r.Map["3"].Scores = make(map[string]int)
-	// r.Map["3"].Plays = make(map[string]int)
-
-	// r.Map["4"] = &Room{Id: "4", Status: Waiting}
-	// r.Map["4"].Scores = make(map[string]int)
-	// r.Map["4"].Plays = make(map[string]int)
-
 }

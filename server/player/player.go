@@ -2,7 +2,6 @@ package player
 
 import (
 	"rpsls/uuid"
-	"sync"
 
 	"github.com/gorilla/websocket"
 )
@@ -14,7 +13,6 @@ type Player struct {
 }
 
 type Players struct {
-	sync.RWMutex
 	Map map[string]*Player `json:"list"`
 }
 
