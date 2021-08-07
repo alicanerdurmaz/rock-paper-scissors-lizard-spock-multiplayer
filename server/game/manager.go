@@ -3,6 +3,7 @@ package game
 import (
 	"rpsls/room"
 	"rpsls/util"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -32,47 +33,47 @@ func (g *Game) Play(payload *WebSocketPayload) {
 	g.Rooms.RWMutex.Lock()
 	defer g.Rooms.RWMutex.Unlock()
 
-	currentRoom := g.Rooms.Map[payload.RoomId]
+	roomId := payload.RoomId
+	currentRoom := g.Rooms.Map[roomId]
+	playerId := payload.PlayerId
 
 	if currentRoom.Status == room.Finished {
 		return
 	}
 
-	currentRoom.Choices[payload.PlayerId] = payload.Value
+	currentRoom.Choices[playerId] = payload.Value
 
-	played := g.CheckPlayersDidChoose(payload)
+	played := checkPlayersDidChoose(currentRoom)
 	if played {
-		g.FinishGame(currentRoom.Id)
+		calculateWinner(currentRoom)
+		finishGame(currentRoom)
+
+		time.Sleep(3 * time.Second)
+		restartGame(currentRoom)
 		return
 	}
 
+	SendRoomStateToAllConnectionsInRoom(currentRoom)
 }
 
-func (g *Game) FinishGame(roomId string) {
-	g.CalculateWinner(roomId)
-
-	currentRoom := g.Rooms.Map[roomId]
+func finishGame(currentRoom *room.Room) {
 	currentRoom.Status = room.Finished
+	SendRoomStateToAllConnectionsInRoom(currentRoom)
 
-	g.RestartGame(roomId)
 }
 
-func (g *Game) RestartGame(roomId string) {
-
-	currentRoom := g.Rooms.Map[roomId]
-
+func restartGame(currentRoom *room.Room) {
 	for playerId := range currentRoom.Choices {
 		currentRoom.Choices[playerId] = 0
 	}
+
 	currentRoom.Winner = ""
 	currentRoom.Round += 1
 	currentRoom.Status = room.Started
-
+	SendRoomStateToAllConnectionsInRoom(currentRoom)
 }
 
-func (g *Game) CheckPlayersDidChoose(payload *WebSocketPayload) bool {
-	currentRoom := g.Rooms.Map[payload.RoomId]
-
+func checkPlayersDidChoose(currentRoom *room.Room) bool {
 	if currentRoom.Status != room.Started {
 		return false
 	}
@@ -86,9 +87,7 @@ func (g *Game) CheckPlayersDidChoose(payload *WebSocketPayload) bool {
 	return true
 }
 
-func (g *Game) CalculateWinner(roomId string) {
-	currentRoom := g.Rooms.Map[roomId]
-
+func calculateWinner(currentRoom *room.Room) {
 	keys := make([]string, 0, len(currentRoom.Choices))
 	for k := range currentRoom.Choices {
 		keys = append(keys, k)

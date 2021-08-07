@@ -35,7 +35,7 @@ type WsResponse = {
   command: string
   message: string
   room: {
-    players: Record<string, number>
+    players: Record<string, Player>
     scores: Record<string, number>
     choices: Record<string, number>
     winner: string
@@ -78,7 +78,7 @@ const Game = () => {
     ws.current.send(JSON.stringify({ roomId: roomId, playerId: playerId, value: value, command: 'play' }))
   }
 
-  if (!data || data?.room?.status === 0) return <h1>Yükleniyor</h1>
+  if (!data || data?.room?.status === RoomStatus.Waiting) return <h1>Yükleniyor</h1>
   if (data?.command === 'error') return <h1>{data.message}</h1>
 
   const room = data.room
@@ -90,6 +90,7 @@ const Game = () => {
 
   const winner = room.winner === playerId ? 'YOU' : 'ENEMY'
 
+  console.log('ROOM STATUS : ', RoomStatus[data?.room.status])
   return (
     <div>
       <h1>Round : {room.round} </h1>

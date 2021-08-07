@@ -3,6 +3,7 @@ package game
 import (
 	"log"
 	"net/http"
+	"rpsls/room"
 
 	"github.com/gorilla/websocket"
 )
@@ -51,12 +52,16 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		roomId := payload.RoomId
+		playerId := payload.PlayerId
+		room := g.Rooms.Map[roomId]
+
 		if payload.checkIdIsValid() {
 			conn.WriteJSON(map[string]string{"command": Error, "message": "Room ID or Player ID is invalid"})
 			return
 		}
 
-		if !g.Rooms.CheckPlayerIsInRoom(payload.RoomId, payload.PlayerId) {
+		if !g.Rooms.CheckPlayerIsInRoom(roomId, playerId) {
 			conn.WriteJSON(map[string]string{"command": Error, "message": "room is full or you not authorized to join"})
 			return
 		}
@@ -66,10 +71,9 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 		switch payload.Command {
 		case Connect:
 			g.Connect(payload, conn)
-			g.SendRoomStateToAllConnectionsInRoom(payload.RoomId)
+			SendRoomStateToAllConnectionsInRoom(room)
 		case Play:
 			g.Play(payload)
-			g.SendRoomStateToAllConnectionsInRoom(payload.RoomId)
 		default:
 			conn.WriteJSON(map[string]string{"command": Error, "message": "something went wrong"})
 
@@ -78,19 +82,14 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (g *Game) SendToAllConnectionsInRoom(roomId string, payload map[string]interface{}) {
-	room := g.Rooms.Map[roomId]
+func SendToAllConnectionsInRoom(room *room.Room, payload map[string]interface{}) {
 	for _, p := range room.Players {
 		p.Conn.WriteJSON(payload)
 	}
 }
 
-func (g *Game) SendRoomStateToAllConnectionsInRoom(roomId string) {
-	room := g.Rooms.Map[roomId]
-
+func SendRoomStateToAllConnectionsInRoom(room *room.Room) {
 	for _, p := range room.Players {
-		println("SendRoomStateToAllConnectionsInRoom : -> ", p.Conn.RemoteAddr().String())
 		p.Conn.WriteJSON(map[string]interface{}{"command": Ok, "room": room})
 	}
-
 }
