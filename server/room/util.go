@@ -12,10 +12,6 @@ func (r *Rooms) CheckGameIsFull(roomId string) bool {
 }
 
 func (r *Rooms) CheckPlayerIsInRoom(roomId string, playerId string) bool {
-	for _, player := range r.Map[roomId].Players {
-		if player.Id == playerId {
-			return true
-		}
-	}
-	return false
+	_, ok := r.Map[roomId].Players[playerId]
+	return ok
 }

@@ -44,10 +44,6 @@ func (r *Rooms) CreateRoom() (string, error) {
 		return "", errors.New("something went wrong when creating room id")
 	}
 
-	if r.CheckRoomIsExist(roomId) {
-		return roomId, errors.New("room ID not available, try again")
-	}
-
 	r.Map[roomId] = &Room{Id: roomId, Status: Waiting}
 	r.Map[roomId].Players = make(map[string]*player.Player)
 	r.Map[roomId].Scores = make(map[string]int)

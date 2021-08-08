@@ -7,6 +7,7 @@ import (
 
 func New(g *game.Game) {
 	http.HandleFunc("/rooms", setupCORS(g.GetAllRooms))
+	http.HandleFunc("/room/connect", setupCORS(g.ConnectHandler))
 	http.HandleFunc("/room/create", setupCORS(g.CrateRoomHandler))
 	http.HandleFunc("/room/join", setupCORS(g.JoinRoomHandler))
 

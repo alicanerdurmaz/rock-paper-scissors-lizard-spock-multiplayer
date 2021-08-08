@@ -30,6 +30,9 @@ type WebSocketPayload struct {
 }
 
 func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
+	roomId := ""
+	playerId := ""
+
 	conn, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
 		log.Println("Error upgrader conn.", err)
@@ -42,9 +45,10 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 	for {
 		payload := &WebSocketPayload{}
 		err = conn.ReadJSON(payload)
+
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
-				log.Println("IsCloseError()", err, conn.RemoteAddr().String())
+				log.Println(err, "playerId:", playerId, "roomId:", roomId)
 			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Println("IsUnexpectedCloseError()", err)
@@ -52,8 +56,8 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		roomId := payload.RoomId
-		playerId := payload.PlayerId
+		roomId = payload.RoomId
+		playerId = payload.PlayerId
 		room := g.Rooms.Map[roomId]
 
 		if payload.checkIdIsValid() {
@@ -76,7 +80,6 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 			g.Play(payload)
 		default:
 			conn.WriteJSON(map[string]string{"command": Error, "message": "something went wrong"})
-
 		}
 
 	}
