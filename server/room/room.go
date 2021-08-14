@@ -22,6 +22,7 @@ type Room struct {
 	Round   int                       `json:"round"`
 	Id      string                    `json:"roomId"`
 	Status  int                       `json:"status"`
+	HostId  string                    `json:"hostId"`
 }
 
 type Rooms struct {

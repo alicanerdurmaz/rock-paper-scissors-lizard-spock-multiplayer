@@ -7,9 +7,8 @@ import (
 )
 
 type Player struct {
-	Id     string          `json:"playerId"`
-	Status int             `json:"status"`
-	Conn   *websocket.Conn `json:"conn"`
+	Id   string          `json:"playerId"`
+	Conn *websocket.Conn `json:"-"`
 }
 
 type Players struct {
@@ -25,9 +24,8 @@ func NewPlayers() *Players {
 func (p *Players) NewPlayer() *Player {
 	id, _ := uuid.New()
 	player := &Player{
-		Id:     id,
-		Status: 0,
-		Conn:   nil,
+		Id:   id,
+		Conn: nil,
 	}
 	p.Add(player)
 	return player
@@ -35,9 +33,8 @@ func (p *Players) NewPlayer() *Player {
 
 func (p *Players) RegisterPlayer(id string) *Player {
 	player := &Player{
-		Id:     id,
-		Status: 0,
-		Conn:   nil,
+		Id:   id,
+		Conn: nil,
 	}
 	p.Add(player)
 	return player

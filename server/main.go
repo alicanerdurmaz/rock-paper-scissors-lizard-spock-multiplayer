@@ -16,7 +16,9 @@ func main() {
 	rooms := room.NewRooms()
 	players := player.NewPlayers()
 	game := game.New(rooms, players)
+
 	createMockData(game)
+
 	router.New(game)
 
 	fmt.Println("Starting server on port", port)
@@ -25,5 +27,4 @@ func main() {
 
 func createMockData(g *game.Game) {
 	g.Rooms.TestCreateRoom()
-
 }

@@ -1,7 +1,12 @@
 import React from "react";
+import { useGameManager } from "../../context/GameManager";
+import ShareRoom from "../ShareRoom";
+import Spinner from "../Spinner";
 
 const Game = () => {
-  return <div>Game</div>;
+  const { roomState } = useGameManager();
+
+  return <div></div>;
 };
 
 export default Game;

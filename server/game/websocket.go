@@ -31,7 +31,6 @@ type WebSocketPayload struct {
 
 func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 	roomId := ""
-	playerId := ""
 
 	conn, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
@@ -41,15 +40,16 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	defer conn.Close()
+	conn.SetCloseHandler(func(code int, text string) error {
+		conn.Close()
+		return nil
+	})
 
 	for {
 		payload := &WebSocketPayload{}
 		err = conn.ReadJSON(payload)
 
 		if err != nil {
-			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
-				log.Println(err, "playerId:", playerId, "roomId:", roomId)
-			}
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Println("IsUnexpectedCloseError()", err)
 			}
@@ -57,7 +57,7 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		roomId = payload.RoomId
-		playerId = payload.PlayerId
+		playerId := payload.PlayerId
 		room := g.Rooms.Map[roomId]
 
 		if payload.checkIdIsValid() {

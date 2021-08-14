@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { connectRoom } from "../src/api/api";
 import Spinner from "../src/components/Spinner";
 import { usePlayerContext } from "../src/context/PlayerContext";
+import { routes } from "../src/utils/routes";
 
 export default function HomePage() {
   const router = useRouter();
@@ -15,11 +16,12 @@ export default function HomePage() {
       const { roomId, err } = await connectRoom(player.playerId);
 
       if (err) {
+        console.error(err);
         router.push("/404");
         return;
       }
 
-      router.push(roomId);
+      router.push(`${routes.room}/${roomId}`);
     };
 
     connectRoomHandler();

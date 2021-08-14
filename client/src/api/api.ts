@@ -45,7 +45,7 @@ export const joinRoom = async ({
   );
   const data: JoinRoomResponse = await response.json();
 
-  return data;
+  return { roomId: data?.roomId, err: data?.error };
 };
 
 export const signUp = async () => {

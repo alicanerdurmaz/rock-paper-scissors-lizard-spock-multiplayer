@@ -1,18 +1,23 @@
 import { useRouter } from "next/dist/client/router";
-import { createContext, useContext, useEffect, useRef } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import ShareRoom from "../../components/ShareRoom";
+import Spinner from "../../components/Spinner";
 import { usePlayerContext } from "../PlayerContext";
 import { Commands, WsResponse } from "./types";
 
-interface IGameManagerContext {}
+interface IGameManagerContext {
+  roomState: WsResponse;
+}
 
 const GameManager = createContext<IGameManagerContext | undefined>(undefined);
 
 export const GameManagerProvider: React.FC = ({ children }) => {
   const { player } = usePlayerContext();
+  const [roomState, setRoomState] = useState<WsResponse | null>(null);
   const router = useRouter();
 
   const playerId = player.playerId;
-  const roomId = router.asPath.substring(1);
+  const roomId = router.query.roomId;
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/ws");
@@ -35,11 +40,21 @@ export const GameManagerProvider: React.FC = ({ children }) => {
 
     ws.onmessage = function (this: WebSocket, event: MessageEvent) {
       const data: WsResponse = JSON.parse(event.data);
-      console.log(data);
+      setRoomState(data);
     };
   }, [playerId, roomId]);
 
-  return <GameManager.Provider value={{}}>{children}</GameManager.Provider>;
+  const value = {
+    roomState: roomState as WsResponse,
+  };
+
+  console.log(roomState?.room?.status);
+  return (
+    <GameManager.Provider value={value}>
+      {roomState?.room?.status === 0 && <ShareRoom />}
+      {!roomState ? <Spinner /> : children}
+    </GameManager.Provider>
+  );
 };
 
 export const useGameManager = () => {

@@ -1,13 +1,10 @@
-import { FC } from "react";
+import { useRouter } from "next/dist/client/router";
 
-interface ShareRoomProps {
-  roomUrl: string | null;
-}
+const ShareRoom = () => {
+  const router = useRouter();
+  const roomUrl = `http://localhost:3000/j/${router.query.roomId}`;
 
-const ShareRoom: FC<ShareRoomProps> = ({ roomUrl }) => {
   const copyToClipboard = () => {
-    if (!roomUrl) return;
-
     navigator.permissions
       .query({ name: "clipboard-write" })
       .then((result) => {
