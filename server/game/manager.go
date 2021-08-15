@@ -48,7 +48,7 @@ func (g *Game) Play(payload *WebSocketPayload) {
 		calculateWinner(currentRoom)
 		finishGame(currentRoom)
 
-		time.Sleep(3 * time.Second)
+		time.Sleep(4 * time.Second)
 		restartGame(currentRoom)
 		return
 	}
@@ -64,7 +64,7 @@ func finishGame(currentRoom *room.Room) {
 
 func restartGame(currentRoom *room.Room) {
 	for playerId := range currentRoom.Choices {
-		currentRoom.Choices[playerId] = 0
+		currentRoom.Choices[playerId] = Null
 	}
 
 	currentRoom.Winner = ""
@@ -79,7 +79,7 @@ func checkPlayersDidChoose(currentRoom *room.Room) bool {
 	}
 
 	for _, v := range currentRoom.Choices {
-		if v == 0 {
+		if v == Null {
 			return false
 		}
 	}

@@ -89,7 +89,7 @@ func (r *Rooms) GetAll() map[string]*Room {
 func (r *Room) AddPlayer(player *player.Player) {
 	r.Players[player.Id] = player
 	r.Scores[player.Id] = 0
-	r.Choices[player.Id] = 0
+	r.Choices[player.Id] = -1
 }
 
 func (r *Rooms) TestCreateRoom() {

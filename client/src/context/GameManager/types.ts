@@ -7,7 +7,7 @@ export enum RoomStatus {
 }
 
 export enum Choice {
-  Null = 0,
+  Null = -1,
   Rock,
   Paper,
   Scissors,
@@ -15,13 +15,13 @@ export enum Choice {
   Spock,
 }
 
-export const ChoiceMap = {
+export const ChoiceName = {
   [Choice.Null]: "",
-  [Choice.Rock]: "Rock",
-  [Choice.Paper]: "Paper",
-  [Choice.Scissors]: "Scissors",
-  [Choice.Lizard]: "Lizard",
-  [Choice.Spock]: "Spock",
+  [Choice.Rock]: "rock",
+  [Choice.Paper]: "paper",
+  [Choice.Scissors]: "scissors",
+  [Choice.Lizard]: "lizard",
+  [Choice.Spock]: "spock",
 };
 
 export const Commands = {
@@ -36,7 +36,7 @@ export type WsResponse = {
   room: {
     players: Record<string, IPlayer>;
     scores: Record<string, number>;
-    choices: Record<string, number>;
+    choices: Record<string, Choice>;
     winner: string;
     round: number;
     roomId: string;

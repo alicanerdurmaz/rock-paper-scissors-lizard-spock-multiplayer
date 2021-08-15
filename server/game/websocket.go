@@ -30,7 +30,6 @@ type WebSocketPayload struct {
 }
 
 func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
-	roomId := ""
 
 	conn, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
@@ -46,6 +45,7 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 	})
 
 	for {
+
 		payload := &WebSocketPayload{}
 		err = conn.ReadJSON(payload)
 
@@ -56,7 +56,7 @@ func (g *Game) WebSocketHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		roomId = payload.RoomId
+		roomId := payload.RoomId
 		playerId := payload.PlayerId
 		room := g.Rooms.Map[roomId]
 

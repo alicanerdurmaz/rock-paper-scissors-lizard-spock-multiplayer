@@ -6,19 +6,19 @@ import (
 )
 
 // choice values
-//	- `Null` : 0
-//	- `Rock` : 1
-//	- `Paper` : 2
-//	- `Scissors` : 3
-//	- `Lizard` : 4
-//	- `Spock` : 5
+//	- `Null` : -1
+//	- `Rock` : 0
+//	- `Paper` : 1
+//	- `Scissors` : 2
+//	- `Lizard` : 3
+//	- `Spock` : 4
 const (
-	Null int = iota
-	Rock
-	Paper
-	Scissors
-	Lizard
-	Spock
+	Null     = -1
+	Rock     = 0
+	Paper    = 1
+	Scissors = 2
+	Lizard   = 3
+	Spock    = 4
 )
 
 // which values to dominate.

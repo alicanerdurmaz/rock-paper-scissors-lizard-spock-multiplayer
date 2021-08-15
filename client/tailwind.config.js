@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   mode: "jit",
   purge: [
@@ -6,6 +8,7 @@ module.exports = {
   ],
   darkMode: false,
   theme: {
+    colors: { ...colors },
     fontFamily: {
       sans: ['"Atkinson Hyperlegible"', "system-ui", "ui-sans-serif"],
       serif: ['"Atkinson Hyperlegible"', "Georgia"],

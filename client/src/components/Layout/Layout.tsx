@@ -5,7 +5,7 @@ const Layout: FC = ({ children }) => {
     <>
       <header className="py-12 px-4 text-center">
         <div>
-          <h1 className="text-2xl md:text-5xl text-gray-800 font-semibold">
+          <h1 className="text-2xl md:text-5xl font-semibold">
             <span>Rock Paper Scissors</span>
             <span className="block">Lizard Spock</span>
           </h1>
