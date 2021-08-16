@@ -1,5 +1,5 @@
 import { Choice, ChoiceName } from "../../context/GameManager/types";
-import ChoiceButtonLoop from "./ChoiceButtonLoop";
+import ChoiceIconLoop from "./ChoiceIconLoop";
 import ChoiceIcon from "./ChoiceIcon";
 
 const PlayerDidChoose = ({ playerChoice }: { playerChoice: Choice }) => {
@@ -15,7 +15,7 @@ const PlayerDidChoose = ({ playerChoice }: { playerChoice: Choice }) => {
       <div className="font-bold text-xl md:text-5xl md:mx-24">VS</div>
 
       <div className="flex items-center justify-center flex-col">
-        <ChoiceButtonLoop />
+        <ChoiceIconLoop />
         <div className="mt-2 text-l md:text-2xl">waiting for them</div>
       </div>
     </div>

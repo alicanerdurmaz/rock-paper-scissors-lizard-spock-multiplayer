@@ -18,7 +18,6 @@ export const IconMap: Record<Choice, string> = {
 };
 
 const ChoiceIcon: FC<ChoiceIconProps> = ({ name }) => {
-  console.log(name);
   return (
     <motion.div
       whileHover={{ scale: 1.2 }}

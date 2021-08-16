@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import ChoiceIcon, { IconMap } from "./ChoiceIcon";
 
-const ChoiceButtonLoop = () => {
+const ChoiceIconLoop = () => {
   const [choiceIconIndex, setChoiceIconIndex] = useState(0);
 
   const choiceIcons = Object.values(IconMap).map((choiceIcon) => choiceIcon);
@@ -23,4 +23,4 @@ const ChoiceButtonLoop = () => {
   return <ChoiceIcon name={choiceIconIndex} />;
 };
 
-export default memo(ChoiceButtonLoop);
+export default memo(ChoiceIconLoop);
