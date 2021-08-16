@@ -1,13 +1,15 @@
 import { FC } from "react";
 import { Choice } from "../../context/GameManager/types";
+import { motion } from "framer-motion";
 
 type ChoiceWithoutNull = Exclude<Choice, Choice.Null>;
 
 interface ChoiceIconProps {
-  name: ChoiceWithoutNull;
+  name: Choice;
 }
 
-export const IconMap: Record<ChoiceWithoutNull, string> = {
+export const IconMap: Record<Choice, string> = {
+  [Choice.Null]: "",
   [Choice.Rock]: "💎",
   [Choice.Paper]: "📜",
   [Choice.Scissors]: "✂️",
@@ -16,10 +18,15 @@ export const IconMap: Record<ChoiceWithoutNull, string> = {
 };
 
 const ChoiceIcon: FC<ChoiceIconProps> = ({ name }) => {
+  console.log(name);
   return (
-    <div className="rounded-full border-coolGray-100 shadow-md p-4 text-4xl">
+    <motion.div
+      whileHover={{ scale: 1.2 }}
+      whileTap={{ scale: 0.95 }}
+      className="rounded-full border-coolGray-100 shadow-md p-4 text-4xl"
+    >
       {IconMap[name]}
-    </div>
+    </motion.div>
   );
 };
 

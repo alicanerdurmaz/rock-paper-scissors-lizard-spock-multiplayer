@@ -15,7 +15,7 @@ export enum Choice {
   Spock,
 }
 
-export const ChoiceName = {
+export const ChoiceName: Record<Choice, string> = {
   [Choice.Null]: "",
   [Choice.Rock]: "rock",
   [Choice.Paper]: "paper",

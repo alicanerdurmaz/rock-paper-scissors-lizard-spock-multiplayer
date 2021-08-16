@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	RESTART_TIME = 3
+	RESTART_TIME = 2
 )
 
 func (g *Game) Connect(payload *WebSocketPayload, conn *websocket.Conn) {
@@ -48,7 +48,7 @@ func (g *Game) Play(payload *WebSocketPayload) {
 		calculateWinner(currentRoom)
 		finishGame(currentRoom)
 
-		time.Sleep(4 * time.Second)
+		time.Sleep(RESTART_TIME * time.Second)
 		restartGame(currentRoom)
 		return
 	}

@@ -10,7 +10,8 @@ const ChoiceButtonLoop = () => {
     const intervalId = setInterval(() => {
       setChoiceIconIndex((prevState) => {
         const increment = prevState + 1;
-        return increment % choiceIcons.length;
+        const nextIndex = increment % (choiceIcons.length - 1);
+        return nextIndex;
       });
     }, 300);
 
