@@ -1,0 +1,21 @@
+_id: req_81fcecd7f750453fbb6fb4651cbcca34
+type: Request
+parentId: fld_ef831ab2462a4916aea14429e4c78c85
+modified: 1629834891973
+created: 1627140608925
+url: http://{{ _.base_url }}/room/create
+name: Create Room
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1627506581761
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

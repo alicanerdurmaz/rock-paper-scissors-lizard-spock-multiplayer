@@ -1,0 +1,21 @@
+_id: req_82094438105d461882e452a9fff53d44
+type: Request
+parentId: fld_ef831ab2462a4916aea14429e4c78c85
+modified: 1629834911671
+created: 1627142413107
+url: http://{{ _.base_url }}/rooms
+name: Get Rooms
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1627506581711
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

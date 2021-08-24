@@ -1,0 +1,29 @@
+_id: req_4e500107157240989c1213db45077c35
+type: Request
+parentId: fld_ef831ab2462a4916aea14429e4c78c85
+modified: 1629834904117
+created: 1628427962699
+url: http://{{ _.base_url }}/room/connect
+name: Connect room
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: roomId
+    value: "1"
+    description: ""
+    id: pair_9f261df5bec64119a6ed48171b6c436e
+  - name: playerId
+    value: "1"
+    description: ""
+    id: pair_4564a5430ecb4be7b2fb1a65bc3a231a
+headers: []
+authentication: {}
+metaSortKey: -1627506581723.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

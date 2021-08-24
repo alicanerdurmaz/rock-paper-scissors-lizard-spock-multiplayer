@@ -1,0 +1,14 @@
+_id: env_6f628a169bd34b159ed796a468cbe08c
+type: Environment
+parentId: env_81aa3d7b86a224776adcfc4f5618b1c09f8e1faf
+modified: 1629834793819
+created: 1629834757589
+name: production
+data:
+  base_url: rpsls-multiplayer.herokuapp.com
+dataPropertyOrder:
+  "&":
+    - base_url
+color: "#42a9a7"
+isPrivate: false
+metaSortKey: 1629834757589

@@ -1,0 +1,21 @@
+_id: req_d748f95cf06d4c1c93f657c8d3f387da
+type: Request
+parentId: fld_89f255efbc7f4830b45df86b23bd89bd
+modified: 1629834883497
+created: 1627738780300
+url: http://{{ _.base_url }}/players
+name: Get Players
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1627506581686
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

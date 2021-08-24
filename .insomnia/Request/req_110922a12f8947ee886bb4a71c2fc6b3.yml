@@ -1,0 +1,29 @@
+_id: req_110922a12f8947ee886bb4a71c2fc6b3
+type: Request
+parentId: fld_ef831ab2462a4916aea14429e4c78c85
+modified: 1629834898025
+created: 1627140616819
+url: http://{{ _.base_url }}/room/join
+name: Join Room
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: roomId
+    value: 7XFRP7nng
+    description: ""
+    id: pair_9f261df5bec64119a6ed48171b6c436e
+  - name: playerId
+    value: "1"
+    description: ""
+    id: pair_70f138f6e5aa4831a3bc951e69b86669
+headers: []
+authentication: {}
+metaSortKey: -1627506581736
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

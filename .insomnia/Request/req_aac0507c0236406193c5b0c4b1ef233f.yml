@@ -1,0 +1,25 @@
+_id: req_aac0507c0236406193c5b0c4b1ef233f
+type: Request
+parentId: fld_89f255efbc7f4830b45df86b23bd89bd
+modified: 1629834843849
+created: 1627506581661
+url: https:/{{ _.base_url }}/player/register
+name: Register Player
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: playerId
+    value: "1"
+    description: ""
+    id: pair_f0ae6737f86845fd83a43faa4cd455ac
+headers: []
+authentication: {}
+metaSortKey: -1627506581711
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
