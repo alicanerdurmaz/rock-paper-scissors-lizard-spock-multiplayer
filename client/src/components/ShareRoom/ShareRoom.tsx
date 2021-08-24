@@ -1,8 +1,17 @@
 import { useRouter } from "next/dist/client/router";
+import { useEffect, useState } from "react";
 
 const ShareRoom = () => {
+  const [origin, setOrigin] = useState(
+    typeof window === "undefined" ? "" : window.location.origin
+  );
   const router = useRouter();
-  const roomUrl = `http://localhost:3000/j/${router.query.roomId}`;
+
+  const roomUrl = `${origin}/j/${router.query.roomId}`;
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const copyToClipboard = () => {
     navigator.permissions

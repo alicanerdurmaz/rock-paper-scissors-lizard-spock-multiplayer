@@ -1,11 +1,6 @@
 import { useRouter } from "next/dist/client/router";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { WEBSOCKET_URL } from "../../api/api";
 import ShareRoom from "../../components/ShareRoom";
 import Spinner from "../../components/Spinner";
 import { usePlayerContext } from "../PlayerContext";
@@ -26,7 +21,7 @@ export const GameManagerProvider: React.FC = ({ children }) => {
   const router = useRouter();
   const { player } = usePlayerContext();
   const [roomState, setRoomState] = useState<Room | null>(null);
-  const [ws] = useState(() => new WebSocket("ws://localhost:8080/ws"));
+  const [ws] = useState(() => new WebSocket(WEBSOCKET_URL));
 
   const playerId = player.playerId;
 
@@ -65,7 +60,6 @@ export const GameManagerProvider: React.FC = ({ children }) => {
     playerId,
   };
 
-  console.log(roomState);
   return (
     <GameManager.Provider value={value}>
       {roomState?.status === 0 && <ShareRoom />}

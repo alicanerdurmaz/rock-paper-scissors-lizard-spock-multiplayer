@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:8080";
+export const BASE_URL = "https://rpsls-multiplayer.herokuapp.com";
+export const WEBSOCKET_URL = `wss://rpsls-multiplayer.herokuapp.com/ws`;
 
 type ConnectRoomResponse = {
   roomId: "string";
