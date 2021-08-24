@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"rpsls/game"
 	"rpsls/player"
 	"rpsls/room"
@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	port := ":8080"
+	port := ":" + os.Getenv("PORT")
 
 	rooms := room.NewRooms()
 	players := player.NewPlayers()
@@ -22,7 +22,9 @@ func main() {
 	router.New(game)
 
 	fmt.Println("Starting server on port", port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	if err := http.ListenAndServe(port, nil); err != nil {
+		panic(err)
+	}
 }
 
 func createMockData(g *game.Game) {
