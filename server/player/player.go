@@ -1,7 +1,7 @@
 package player
 
 import (
-	"rpsls/uuid"
+	"server/uuid"
 
 	"github.com/gorilla/websocket"
 )

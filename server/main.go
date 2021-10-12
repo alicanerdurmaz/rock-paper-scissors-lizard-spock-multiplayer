@@ -4,14 +4,18 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"rpsls/game"
-	"rpsls/player"
-	"rpsls/room"
-	"rpsls/router"
+	"server/game"
+	"server/player"
+	"server/room"
+	"server/router"
 )
 
 func main() {
-	port := ":" + os.Getenv("PORT")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "3000"
+	}
 
 	rooms := room.NewRooms()
 	players := player.NewPlayers()
@@ -21,8 +25,8 @@ func main() {
 
 	router.New(game)
 
-	fmt.Println("Starting server on port", port)
-	if err := http.ListenAndServe(port, nil); err != nil {
+	fmt.Println("Starting server on port", ":"+port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		panic(err)
 	}
 }

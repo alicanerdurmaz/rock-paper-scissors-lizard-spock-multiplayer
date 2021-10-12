@@ -1,4 +1,4 @@
-module rpsls
+module server
 
 go 1.16
 

@@ -2,7 +2,7 @@ package router
 
 import (
 	"net/http"
-	"rpsls/game"
+	"server/game"
 )
 
 func New(g *game.Game) {

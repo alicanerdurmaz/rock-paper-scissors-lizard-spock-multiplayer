@@ -2,8 +2,8 @@ package room
 
 import (
 	"errors"
-	"rpsls/player"
-	"rpsls/uuid"
+	"server/player"
+	"server/uuid"
 	"sync"
 )
 

@@ -1,8 +1,8 @@
 package game
 
 import (
-	"rpsls/room"
-	"rpsls/util"
+	"server/room"
+	"server/util"
 	"time"
 
 	"github.com/gorilla/websocket"

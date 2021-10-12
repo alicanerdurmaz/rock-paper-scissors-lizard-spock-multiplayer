@@ -1,8 +1,8 @@
 package game
 
 import (
-	"rpsls/player"
-	"rpsls/room"
+	"server/player"
+	"server/room"
 )
 
 // choice values

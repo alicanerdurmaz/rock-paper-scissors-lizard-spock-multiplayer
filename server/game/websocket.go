@@ -3,7 +3,7 @@ package game
 import (
 	"log"
 	"net/http"
-	"rpsls/room"
+	"server/room"
 
 	"github.com/gorilla/websocket"
 )

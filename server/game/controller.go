@@ -2,7 +2,7 @@ package game
 
 import (
 	"net/http"
-	"rpsls/util"
+	"server/util"
 )
 
 func (g *Game) ConnectHandler(w http.ResponseWriter, req *http.Request) {
